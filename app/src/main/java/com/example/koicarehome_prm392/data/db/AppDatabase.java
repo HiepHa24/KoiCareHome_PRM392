@@ -18,9 +18,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract PondDao pondDao();
     public abstract FishDao fishDao();
-
     private static volatile AppDatabase INSTANCE;
-
     public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
