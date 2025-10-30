@@ -19,6 +19,8 @@ public class User {
     @ColumnInfo(name = "createdAt")
     public long createdAt;
 
+    public User() {}
+
     public User(@NonNull String userName, @NonNull String passwordHash, long createdAt) {
         this.userName = userName;
         this.passwordHash = passwordHash;

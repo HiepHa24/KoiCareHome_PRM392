@@ -28,6 +28,8 @@ public class Pond {
     @ColumnInfo(name = "createdAt")
     public long createdAt;
 
+    public Pond() {}
+
     public Pond(long userId, double volumeLiters, double mineralAmount, long createdAt) {
         this.userId = userId;
         this.volumeLiters = volumeLiters;

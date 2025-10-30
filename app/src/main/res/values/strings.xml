@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">KoiCareHome_PRM392</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="go_register_button">Register</string>
+
+    <!-- register page -->
+    <string name="choose_username_hint">Choose username</string>
+    <string name="choose_password_hint">Choose password</string>
+    <string name="register_button">Register</string>
+    <string name="back_to_login">Back to login</string>
+    <string name="go_back_to_login">Back to login</string>
+
 </resources>
