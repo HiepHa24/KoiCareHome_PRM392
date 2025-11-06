@@ -20,6 +20,14 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
+
+        <!-- Khai báo cho các Activity của chức năng Pond -->
+        <activity
+            android:name=".pond.PondListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".pond.AddEditPondActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
