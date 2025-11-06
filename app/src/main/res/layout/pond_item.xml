@@ -11,24 +11,24 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/textViewPondName"
+            android:id="@+id/textViewPondTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tên Hồ"
+            android:text="Thông tin hồ"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
         <TextView
             android:id="@+id/textViewPondVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="Thể tích" />
 
         <TextView
-            android:id="@+id/textViewPondSalt"
+            android:id="@+id/textViewPondMineral"
             android:layout_width="wrap_content"
-            android udid:id="@+id/textViewPondSalt"
             android:layout_height="wrap_content"
-            android:text="Lượng muối"/>
+            android:text="Lượng khoáng"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

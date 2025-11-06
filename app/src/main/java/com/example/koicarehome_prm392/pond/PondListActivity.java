@@ -73,17 +73,17 @@ public class PondListActivity extends AppCompatActivity {
                 return false; // Không dùng cho chức năng kéo-thả
             }
 
+            // Trong phương thức onSwiped của ItemTouchHelper trong PondListActivity.java
+
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                // Lấy vị trí của item vừa được vuốt
                 int position = viewHolder.getAdapterPosition();
-                // Lấy đối tượng Pond tại vị trí đó từ adapter
                 Pond pondToDelete = adapter.getPondAt(position);
 
-                // Gọi ViewModel để thực hiện thao tác xóa
                 pondViewModel.delete(pondToDelete);
 
-                Toast.makeText(PondListActivity.this, "Đã xóa hồ: " + pondToDelete.name, Toast.LENGTH_SHORT).show();
+                // Thay đổi ở đây: Hiển thị ID của hồ thay vì tên
+                Toast.makeText(PondListActivity.this, "Đã xóa hồ số: " + pondToDelete.pondId, Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView); // Gắn ItemTouchHelper vào RecyclerView
     }

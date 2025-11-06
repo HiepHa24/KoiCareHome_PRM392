@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.koicarehome_prm392.R;
 import com.example.koicarehome_prm392.data.entities.Pond;
 import java.util.ArrayList;
@@ -20,16 +19,19 @@ public class PondAdapter extends RecyclerView.Adapter<PondAdapter.PondHolder> {
     @Override
     public PondHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.pond_item, parent, false); // Bạn cần tạo layout pond_item.xml
+                .inflate(R.layout.pond_item, parent, false);
         return new PondHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PondHolder holder, int position) {
         Pond currentPond = ponds.get(position);
-        holder.textViewName.setText(currentPond.name);
+        // Hiển thị ID của hồ để phân biệt
+        holder.textViewTitle.setText("Hồ số: " + currentPond.pondId);
+        // Hiển thị thể tích
         holder.textViewVolume.setText(String.format("Thể tích: %.0f L", currentPond.volumeLiters));
-        holder.textViewSalt.setText(String.format("Lượng muối cần: %.2f kg", currentPond.requiredSaltAmount));
+        // Hiển thị lượng khoáng, sử dụng trường 'mineralAmount'
+        holder.textViewMineral.setText(String.format("Lượng khoáng cần: %.2f kg", currentPond.mineralAmount));
     }
 
     @Override
@@ -42,21 +44,22 @@ public class PondAdapter extends RecyclerView.Adapter<PondAdapter.PondHolder> {
         notifyDataSetChanged();
     }
 
-    // *** PHƯƠNG THỨC GETPONDAT CẦN THÊM ***
+    // Phương thức này vẫn giữ nguyên, rất hữu ích cho chức năng xóa
     public Pond getPondAt(int position) {
         return ponds.get(position);
     }
 
     class PondHolder extends RecyclerView.ViewHolder {
-        private TextView textViewName;
+        private TextView textViewTitle;
         private TextView textViewVolume;
-        private TextView textViewSalt;
+        private TextView textViewMineral;
 
         public PondHolder(@NonNull View itemView) {
             super(itemView);
-            textViewName = itemView.findViewById(R.id.textViewPondName);
+            // Ánh xạ tới các ID mới trong pond_item.xml
+            textViewTitle = itemView.findViewById(R.id.textViewPondTitle);
             textViewVolume = itemView.findViewById(R.id.textViewPondVolume);
-            textViewSalt = itemView.findViewById(R.id.textViewPondSalt);
+            textViewMineral = itemView.findViewById(R.id.textViewPondMineral);
         }
     }
 }

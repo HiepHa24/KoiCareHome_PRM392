@@ -1,4 +1,4 @@
-// File: AddEditPondActivity.java
+// File: com/example/koicarehome_prm392/pond/AddEditPondActivity.java
 package com.example.koicarehome_prm392.pond;
 
 import android.content.SharedPreferences;
@@ -7,14 +7,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.koicarehome_prm392.data.db.AppDatabase;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.koicarehome_prm392.R;
 import com.example.koicarehome_prm392.data.entities.Pond;
-import java.util.concurrent.Executors;
+import com.example.koicarehome_prm392.viewmodel.PondViewModel;
 
 public class AddEditPondActivity extends AppCompatActivity {
 
-    private EditText etPondName, etPondVolume;
+    private EditText etPondVolume;
     private Button btnSavePond;
+    private PondViewModel pondViewModel; // Sử dụng ViewModel để insert
     private long currentUserId;
 
     @Override
@@ -22,11 +25,13 @@ public class AddEditPondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_pond);
 
-        etPondName = findViewById(R.id.etPondName);
         etPondVolume = findViewById(R.id.etPondVolume);
         btnSavePond = findViewById(R.id.btnSavePond);
 
-        // Lấy userId
+        // Khởi tạo ViewModel
+        pondViewModel = new ViewModelProvider(this).get(PondViewModel.class);
+
+        // Lấy userId từ SharedPreferences
         SharedPreferences prefs = getSharedPreferences("users", MODE_PRIVATE);
         currentUserId = prefs.getLong("current_user_id", -1);
 
@@ -40,30 +45,38 @@ public class AddEditPondActivity extends AppCompatActivity {
     }
 
     private void savePond() {
-        String name = etPondName.getText().toString().trim();
         String volumeStr = etPondVolume.getText().toString().trim();
 
-        if (name.isEmpty() || volumeStr.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        if (volumeStr.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập thể tích hồ", Toast.LENGTH_SHORT).show();
             return;
         }
 
         try {
             double volume = Double.parseDouble(volumeStr);
-            Pond pond = new Pond(currentUserId, name, volume);
+            if (volume <= 0) {
+                Toast.makeText(this, "Thể tích phải lớn hơn 0", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            Executors.newSingleThreadExecutor().execute(() -> {
-                AppDatabase db = AppDatabase.getInstance(getApplicationContext());
-                db.pondDao().insert(pond);
+            // Tính toán lượng khoáng theo công thức
+            // Lượng muối (kg) = Thể tích (lít) * 0.3%
+            double mineralAmount = volume * 0.003;
+            long currentTime = System.currentTimeMillis();
 
-                runOnUiThread(() -> {
-                    Toast.makeText(AddEditPondActivity.this, "Đã lưu hồ thành công!", Toast.LENGTH_SHORT).show();
-                    // Hiển thị lượng muối cần thiết theo Flow 2
-                    String saltMessage = String.format("Lượng khoáng (muối) cần cho hồ: %.2f kg", pond.requiredSaltAmount);
-                    Toast.makeText(AddEditPondActivity.this, saltMessage, Toast.LENGTH_LONG).show();
-                    finish(); // Quay lại màn hình danh sách
-                });
-            });
+            // Tạo đối tượng Pond mới theo đúng constructor của bạn
+            Pond newPond = new Pond(currentUserId, volume, mineralAmount, currentTime);
+
+            // Sử dụng ViewModel để thực hiện việc insert
+            pondViewModel.insert(newPond);
+
+            // Thông báo và kết thúc Activity
+            Toast.makeText(AddEditPondActivity.this, "Đã lưu hồ thành công!", Toast.LENGTH_SHORT).show();
+            String saltMessage = String.format("Lượng khoáng (muối) gợi ý: %.2f kg", mineralAmount);
+            Toast.makeText(AddEditPondActivity.this, saltMessage, Toast.LENGTH_LONG).show();
+
+            finish(); // Quay lại màn hình danh sách
+
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Thể tích không hợp lệ", Toast.LENGTH_SHORT).show();
         }
