@@ -8,40 +8,42 @@ import com.example.koicarehome_prm392.data.dao.PondDao;
 import com.example.koicarehome_prm392.data.entities.Pond;
 
 import java.util.List;
-import java.util.concurrent.Executors; // Import Executors
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PondViewModel extends AndroidViewModel {
 
-    private PondDao pondDao;
+    private final PondDao pondDao;
+    private final ExecutorService executorService;
 
     public PondViewModel(@NonNull Application application) {
         super(application);
         AppDatabase database = AppDatabase.getInstance(application);
         pondDao = database.pondDao();
+        // Tối ưu: Chỉ tạo một luồng duy nhất để xử lý tất cả các tác vụ CSDL
+        executorService = Executors.newSingleThreadExecutor();
+    }
+
+    public void insert(Pond pond) {
+        executorService.execute(() -> pondDao.insert(pond));
+    }
+
+    public void update(Pond pond) {
+        executorService.execute(() -> pondDao.update(pond));
+    }
+
+    public void delete(Pond pond) {
+        executorService.execute(() -> pondDao.delete(pond));
     }
 
     public LiveData<List<Pond>> getPondsByUserId(long userId) {
         return pondDao.getPondsByUserId(userId);
     }
 
-    // *** PHƯƠNG THỨC DELETE CẦN THÊM ***
-    public void delete(Pond pond) {
-        // Thực thi việc xóa trên một luồng riêng để không chặn luồng UI
-        Executors.newSingleThreadExecutor().execute(() -> {
-            pondDao.delete(pond);
-        });
-    }
-
-    // Các phương thức khác như insert, update có thể được thêm ở đây
-    public void insert(Pond pond) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            pondDao.insert(pond);
-        });
-    }
-
-    public void update(Pond pond) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            pondDao.update(pond);
-        });
+    // Đảm bảo ExecutorService được đóng lại khi ViewModel bị hủy
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        executorService.shutdown();
     }
 }

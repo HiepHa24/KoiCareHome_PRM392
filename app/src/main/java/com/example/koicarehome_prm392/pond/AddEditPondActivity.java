@@ -1,6 +1,7 @@
 // File: com/example/koicarehome_prm392/pond/AddEditPondActivity.java
 package com.example.koicarehome_prm392.pond;
 
+import android.content.Intent; // *** THÊM MỚI ***
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -15,10 +16,16 @@ import com.example.koicarehome_prm392.viewmodel.PondViewModel;
 
 public class AddEditPondActivity extends AppCompatActivity {
 
+    // *** THÊM MỚI: Các hằng số để truyền dữ liệu qua Intent ***
+    public static final String EXTRA_POND_ID = "com.example.koicarehome_prm392.EXTRA_POND_ID";
+    public static final String EXTRA_POND_VOLUME = "com.example.koicarehome_prm392.EXTRA_POND_VOLUME";
+
     private EditText etPondVolume;
     private Button btnSavePond;
-    private PondViewModel pondViewModel; // Sử dụng ViewModel để insert
+    private PondViewModel pondViewModel;
     private long currentUserId;
+
+    private long pondIdToEdit = -1; // Biến để xác định chế độ Sửa. Mặc định là -1 (Thêm mới).
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +34,8 @@ public class AddEditPondActivity extends AppCompatActivity {
 
         etPondVolume = findViewById(R.id.etPondVolume);
         btnSavePond = findViewById(R.id.btnSavePond);
-
-        // Khởi tạo ViewModel
         pondViewModel = new ViewModelProvider(this).get(PondViewModel.class);
 
-        // Lấy userId từ SharedPreferences
         SharedPreferences prefs = getSharedPreferences("users", MODE_PRIVATE);
         currentUserId = prefs.getLong("current_user_id", -1);
 
@@ -40,6 +44,20 @@ public class AddEditPondActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        // *** THÊM MỚI: Kiểm tra xem đây là chế độ Sửa hay Thêm mới ***
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_POND_ID)) {
+            // Đây là chế độ Sửa
+            setTitle("Sửa thông tin hồ"); // Đổi tiêu đề của Activity
+            pondIdToEdit = intent.getLongExtra(EXTRA_POND_ID, -1);
+            double volume = intent.getDoubleExtra(EXTRA_POND_VOLUME, 0);
+            etPondVolume.setText(String.valueOf(volume)); // Hiển thị thể tích cũ lên EditText
+        } else {
+            // Đây là chế độ Thêm mới
+            setTitle("Thêm hồ mới");
+        }
+        // *** KẾT THÚC PHẦN THÊM MỚI ***
 
         btnSavePond.setOnClickListener(v -> savePond());
     }
@@ -59,21 +77,22 @@ public class AddEditPondActivity extends AppCompatActivity {
                 return;
             }
 
-            // Tính toán lượng khoáng theo công thức
-            // Lượng muối (kg) = Thể tích (lít) * 0.3%
             double mineralAmount = volume * 0.003;
             long currentTime = System.currentTimeMillis();
 
-            // Tạo đối tượng Pond mới theo đúng constructor của bạn
-            Pond newPond = new Pond(currentUserId, volume, mineralAmount, currentTime);
-
-            // Sử dụng ViewModel để thực hiện việc insert
-            pondViewModel.insert(newPond);
-
-            // Thông báo và kết thúc Activity
-            Toast.makeText(AddEditPondActivity.this, "Đã lưu hồ thành công!", Toast.LENGTH_SHORT).show();
-            String saltMessage = String.format("Lượng khoáng (muối) gợi ý: %.2f kg", mineralAmount);
-            Toast.makeText(AddEditPondActivity.this, saltMessage, Toast.LENGTH_LONG).show();
+            // *** THAY ĐỔI LOGIC LƯU ***
+            if (pondIdToEdit == -1) {
+                // CHẾ ĐỘ THÊM MỚI: Tạo Pond mới và insert
+                Pond newPond = new Pond(currentUserId, volume, mineralAmount, currentTime);
+                pondViewModel.insert(newPond);
+                Toast.makeText(this, "Đã thêm hồ thành công!", Toast.LENGTH_SHORT).show();
+            } else {
+                // CHẾ ĐỘ SỬA: Tạo Pond mới, gán lại ID cũ và update
+                Pond updatedPond = new Pond(currentUserId, volume, mineralAmount, currentTime);
+                updatedPond.pondId = pondIdToEdit; // *** CỰC KỲ QUAN TRỌNG: Gán lại ID cũ ***
+                pondViewModel.update(updatedPond);
+                Toast.makeText(this, "Đã cập nhật hồ thành công!", Toast.LENGTH_SHORT).show();
+            }
 
             finish(); // Quay lại màn hình danh sách
 

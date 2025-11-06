@@ -5,7 +5,7 @@ package com.example.koicarehome_prm392.pond;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.widget.Toast; // *** THIẾU IMPORT NÀY ***
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,23 +14,26 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.koicarehome_prm392.R;
-import com.example.koicarehome_prm392.adapter.PondAdapter;
-import com.example.koicarehome_prm392.data.entities.Pond;
-import com.example.koicarehome_prm392.viewmodel.PondViewModel;
+import com.example.koicarehome_prm392.R; // *** THIẾU IMPORT NÀY ***
+import com.example.koicarehome_prm392.adapter.PondAdapter; // *** THIẾU IMPORT NÀY ***
+import com.example.koicarehome_prm392.data.entities.Pond; // *** THIẾU IMPORT NÀY ***
+import com.example.koicarehome_prm392.viewmodel.PondViewModel; // *** THIẾU IMPORT NÀY ***
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PondListActivity extends AppCompatActivity {
 
+    // *** THIẾU KHAI BÁO CÁC BIẾN NÀY ***
     private PondViewModel pondViewModel;
     private long currentUserId;
     private PondAdapter adapter;
+    // *** KẾT THÚC PHẦN THIẾU ***
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pond_list);
 
+        // Đoạn code còn lại của bạn đã chính xác, không cần sửa
         SharedPreferences prefs = getSharedPreferences("users", MODE_PRIVATE);
         currentUserId = prefs.getLong("current_user_id", -1);
 
@@ -74,5 +77,12 @@ public class PondListActivity extends AppCompatActivity {
                 Toast.makeText(PondListActivity.this, "Đã xóa hồ số: " + pondToDelete.pondId, Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);
+
+        adapter.setOnItemClickListener(pond -> {
+            Intent intent = new Intent(PondListActivity.this, AddEditPondActivity.class);
+            intent.putExtra(AddEditPondActivity.EXTRA_POND_ID, pond.pondId);
+            intent.putExtra(AddEditPondActivity.EXTRA_POND_VOLUME, pond.volumeLiters);
+            startActivity(intent);
+        });
     }
 }

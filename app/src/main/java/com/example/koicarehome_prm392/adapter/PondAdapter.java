@@ -14,6 +14,7 @@ import java.util.List;
 
 public class PondAdapter extends RecyclerView.Adapter<PondAdapter.PondHolder> {
     private List<Pond> ponds = new ArrayList<>();
+    private OnItemClickListener listener; // *** THÊM MỚI ***
 
     @NonNull
     @Override
@@ -26,11 +27,8 @@ public class PondAdapter extends RecyclerView.Adapter<PondAdapter.PondHolder> {
     @Override
     public void onBindViewHolder(@NonNull PondHolder holder, int position) {
         Pond currentPond = ponds.get(position);
-        // Hiển thị ID của hồ để phân biệt
         holder.textViewTitle.setText("Hồ số: " + currentPond.pondId);
-        // Hiển thị thể tích
         holder.textViewVolume.setText(String.format("Thể tích: %.0f L", currentPond.volumeLiters));
-        // Hiển thị lượng khoáng, sử dụng trường 'mineralAmount'
         holder.textViewMineral.setText(String.format("Lượng khoáng cần: %.2f kg", currentPond.mineralAmount));
     }
 
@@ -44,7 +42,6 @@ public class PondAdapter extends RecyclerView.Adapter<PondAdapter.PondHolder> {
         notifyDataSetChanged();
     }
 
-    // Phương thức này vẫn giữ nguyên, rất hữu ích cho chức năng xóa
     public Pond getPondAt(int position) {
         return ponds.get(position);
     }
@@ -56,10 +53,27 @@ public class PondAdapter extends RecyclerView.Adapter<PondAdapter.PondHolder> {
 
         public PondHolder(@NonNull View itemView) {
             super(itemView);
-            // Ánh xạ tới các ID mới trong pond_item.xml
             textViewTitle = itemView.findViewById(R.id.textViewPondTitle);
             textViewVolume = itemView.findViewById(R.id.textViewPondVolume);
             textViewMineral = itemView.findViewById(R.id.textViewPondMineral);
+
+            // *** THÊM MỚI: Bắt sự kiện click vào item ***
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(ponds.get(position));
+                }
+            });
         }
+    }
+
+    // *** THÊM MỚI: Interface để lắng nghe sự kiện click ***
+    public interface OnItemClickListener {
+        void onItemClick(Pond pond);
+    }
+
+    // *** THÊM MỚI: Phương thức để Activity đăng ký lắng nghe ***
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }
