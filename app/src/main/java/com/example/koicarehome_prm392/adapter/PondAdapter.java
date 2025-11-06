@@ -1,9 +1,9 @@
-// File: com/example/koicarehome_prm392/adapter/PondAdapter.java
 package com.example.koicarehome_prm392.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView; // *** THÊM IMPORT NÀY ***
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,11 +14,12 @@ import java.util.List;
 
 public class PondAdapter extends RecyclerView.Adapter<PondAdapter.PondHolder> {
     private List<Pond> ponds = new ArrayList<>();
-    private OnItemClickListener listener; // *** THÊM MỚI ***
+    private OnItemActionClickListener listener; // *** SỬA: Đổi tên listener ***
 
     @NonNull
     @Override
     public PondHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Đảm bảo bạn đã tạo file R.layout.pond_item với ImageView cho edit và delete
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.pond_item, parent, false);
         return new PondHolder(itemView);
@@ -50,30 +51,43 @@ public class PondAdapter extends RecyclerView.Adapter<PondAdapter.PondHolder> {
         private TextView textViewTitle;
         private TextView textViewVolume;
         private TextView textViewMineral;
+        private ImageView iconEdit;     // *** THÊM MỚI ***
+        private ImageView iconDelete;   // *** THÊM MỚI ***
 
         public PondHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textViewPondTitle);
             textViewVolume = itemView.findViewById(R.id.textViewPondVolume);
             textViewMineral = itemView.findViewById(R.id.textViewPondMineral);
+            iconEdit = itemView.findViewById(R.id.icon_edit);       // *** THÊM MỚI ***
+            iconDelete = itemView.findViewById(R.id.icon_delete);   // *** THÊM MỚI ***
 
-            // *** THÊM MỚI: Bắt sự kiện click vào item ***
-            itemView.setOnClickListener(v -> {
+            // *** THÊM MỚI: Xử lý click cho icon Sửa ***
+            iconEdit.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(ponds.get(position));
+                    listener.onEditClick(ponds.get(position));
+                }
+            });
+
+            // *** THÊM MỚI: Xử lý click cho icon Xóa ***
+            iconDelete.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onDeleteClick(ponds.get(position));
                 }
             });
         }
     }
 
-    // *** THÊM MỚI: Interface để lắng nghe sự kiện click ***
-    public interface OnItemClickListener {
-        void onItemClick(Pond pond);
+    // *** SỬA: Interface để lắng nghe sự kiện trên từng icon ***
+    public interface OnItemActionClickListener {
+        void onEditClick(Pond pond);
+        void onDeleteClick(Pond pond);
     }
 
-    // *** THÊM MỚI: Phương thức để Activity đăng ký lắng nghe ***
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    // *** SỬA: Phương thức để Activity đăng ký lắng nghe ***
+    public void setOnItemActionClickListener(OnItemActionClickListener listener) {
         this.listener = listener;
     }
 }

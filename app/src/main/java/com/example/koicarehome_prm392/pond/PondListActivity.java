@@ -1,39 +1,38 @@
-// File: D:/PRM392/KoiCareHome_PRM392/app/src/main/java/com/example/koicarehome_prm392/pond/PondListActivity.java
-
 package com.example.koicarehome_prm392.pond;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast; // *** THIẾU IMPORT NÀY ***
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog; // *** THÊM IMPORT NÀY ***
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.koicarehome_prm392.R; // *** THIẾU IMPORT NÀY ***
-import com.example.koicarehome_prm392.adapter.PondAdapter; // *** THIẾU IMPORT NÀY ***
-import com.example.koicarehome_prm392.data.entities.Pond; // *** THIẾU IMPORT NÀY ***
-import com.example.koicarehome_prm392.viewmodel.PondViewModel; // *** THIẾU IMPORT NÀY ***
+import com.example.koicarehome_prm392.R;
+import com.example.koicarehome_prm392.adapter.PondAdapter;
+import com.example.koicarehome_prm392.data.entities.Pond;
+import com.example.koicarehome_prm392.viewmodel.PondViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PondListActivity extends AppCompatActivity {
 
-    // *** THIẾU KHAI BÁO CÁC BIẾN NÀY ***
     private PondViewModel pondViewModel;
     private long currentUserId;
     private PondAdapter adapter;
-    // *** KẾT THÚC PHẦN THIẾU ***
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pond_list);
 
-        // Đoạn code còn lại của bạn đã chính xác, không cần sửa
+        Toolbar toolbar = findViewById(R.id.toolbar_pond_list);
+        setSupportActionBar(toolbar);
+        setTitle("Danh sách hồ cá");
+
         SharedPreferences prefs = getSharedPreferences("users", MODE_PRIVATE);
         currentUserId = prefs.getLong("current_user_id", -1);
 
@@ -52,9 +51,7 @@ public class PondListActivity extends AppCompatActivity {
 
         pondViewModel = new ViewModelProvider(this).get(PondViewModel.class);
 
-        pondViewModel.getPondsByUserId(currentUserId).observe(this, ponds -> {
-            adapter.setPonds(ponds);
-        });
+        pondViewModel.getPondsByUserId(currentUserId).observe(this, adapter::setPonds);
 
         FloatingActionButton fabAddPond = findViewById(R.id.fabAddPond);
         fabAddPond.setOnClickListener(v -> {
@@ -62,27 +59,33 @@ public class PondListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        // *** XÓA BỎ HOÀN TOÀN KHỐI new ItemTouchHelper(...) VÀ adapter.setOnItemClickListener(...) CŨ ***
+
+        // *** THÊM MỚI: Xử lý sự kiện click cho các icon ***
+        adapter.setOnItemActionClickListener(new PondAdapter.OnItemActionClickListener() {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
+            public void onEditClick(Pond pond) {
+                // Mở màn hình sửa với thông tin của hồ được chọn
+                Intent intent = new Intent(PondListActivity.this, AddEditPondActivity.class);
+                intent.putExtra(AddEditPondActivity.EXTRA_POND_ID, pond.pondId);
+                intent.putExtra(AddEditPondActivity.EXTRA_POND_VOLUME, pond.volumeLiters);
+                startActivity(intent);
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                Pond pondToDelete = adapter.getPondAt(position);
-                pondViewModel.delete(pondToDelete);
-                Toast.makeText(PondListActivity.this, "Đã xóa hồ số: " + pondToDelete.pondId, Toast.LENGTH_SHORT).show();
+            public void onDeleteClick(Pond pond) {
+                // Hiển thị hộp thoại xác nhận trước khi xóa
+                new AlertDialog.Builder(PondListActivity.this)
+                        .setTitle("Xác nhận xóa")
+                        .setMessage("Bạn có chắc chắn muốn xóa " + "Hồ số: " + pond.pondId + "?")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            // Nếu người dùng chọn "Xóa", thì mới thực hiện xóa
+                            pondViewModel.delete(pond);
+                            Toast.makeText(PondListActivity.this, "Đã xóa hồ", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Hủy", null) // Không làm gì nếu người dùng chọn "Hủy"
+                        .show();
             }
-        }).attachToRecyclerView(recyclerView);
-
-        adapter.setOnItemClickListener(pond -> {
-            Intent intent = new Intent(PondListActivity.this, AddEditPondActivity.class);
-            intent.putExtra(AddEditPondActivity.EXTRA_POND_ID, pond.pondId);
-            intent.putExtra(AddEditPondActivity.EXTRA_POND_VOLUME, pond.volumeLiters);
-            startActivity(intent);
         });
     }
 }

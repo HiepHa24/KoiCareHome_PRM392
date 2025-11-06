@@ -1,13 +1,14 @@
 // File: com/example/koicarehome_prm392/pond/AddEditPondActivity.java
 package com.example.koicarehome_prm392.pond;
 
-import android.content.Intent; // *** THÊM MỚI ***
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.koicarehome_prm392.R;
@@ -22,6 +23,7 @@ public class AddEditPondActivity extends AppCompatActivity {
 
     private EditText etPondVolume;
     private Button btnSavePond;
+    private Button btnCancel;
     private PondViewModel pondViewModel;
     private long currentUserId;
 
@@ -32,8 +34,12 @@ public class AddEditPondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_pond);
 
+        Toolbar toolbar = findViewById(R.id.toolbar_add_edit_pond);
+        setSupportActionBar(toolbar);
+
         etPondVolume = findViewById(R.id.etPondVolume);
         btnSavePond = findViewById(R.id.btnSavePond);
+        btnCancel = findViewById(R.id.btnCancel);
         pondViewModel = new ViewModelProvider(this).get(PondViewModel.class);
 
         SharedPreferences prefs = getSharedPreferences("users", MODE_PRIVATE);
@@ -45,21 +51,19 @@ public class AddEditPondActivity extends AppCompatActivity {
             return;
         }
 
-        // *** THÊM MỚI: Kiểm tra xem đây là chế độ Sửa hay Thêm mới ***
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_POND_ID)) {
             // Đây là chế độ Sửa
-            setTitle("Sửa thông tin hồ"); // Đổi tiêu đề của Activity
+            setTitle("Sửa thông tin hồ");
             pondIdToEdit = intent.getLongExtra(EXTRA_POND_ID, -1);
             double volume = intent.getDoubleExtra(EXTRA_POND_VOLUME, 0);
-            etPondVolume.setText(String.valueOf(volume)); // Hiển thị thể tích cũ lên EditText
+            etPondVolume.setText(String.valueOf(volume));
         } else {
-            // Đây là chế độ Thêm mới
             setTitle("Thêm hồ mới");
         }
-        // *** KẾT THÚC PHẦN THÊM MỚI ***
 
         btnSavePond.setOnClickListener(v -> savePond());
+        btnCancel.setOnClickListener(v -> finish());
     }
 
     private void savePond() {
@@ -80,21 +84,18 @@ public class AddEditPondActivity extends AppCompatActivity {
             double mineralAmount = volume * 0.003;
             long currentTime = System.currentTimeMillis();
 
-            // *** THAY ĐỔI LOGIC LƯU ***
             if (pondIdToEdit == -1) {
-                // CHẾ ĐỘ THÊM MỚI: Tạo Pond mới và insert
                 Pond newPond = new Pond(currentUserId, volume, mineralAmount, currentTime);
                 pondViewModel.insert(newPond);
                 Toast.makeText(this, "Đã thêm hồ thành công!", Toast.LENGTH_SHORT).show();
             } else {
-                // CHẾ ĐỘ SỬA: Tạo Pond mới, gán lại ID cũ và update
                 Pond updatedPond = new Pond(currentUserId, volume, mineralAmount, currentTime);
-                updatedPond.pondId = pondIdToEdit; // *** CỰC KỲ QUAN TRỌNG: Gán lại ID cũ ***
+                updatedPond.pondId = pondIdToEdit;
                 pondViewModel.update(updatedPond);
                 Toast.makeText(this, "Đã cập nhật hồ thành công!", Toast.LENGTH_SHORT).show();
             }
 
-            finish(); // Quay lại màn hình danh sách
+            finish();
 
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Thể tích không hợp lệ", Toast.LENGTH_SHORT).show();
