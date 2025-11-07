@@ -7,38 +7,41 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-<<<<<<< HEAD
-        android:id="@+id/btnFishList"
-        android:layout_width="303dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="568dp"
-        android:text="Quản lý Cá"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
+        <!-- Tiêu đề -->
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Koi Care Home"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp" />
 
-    <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Koi Care Home"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
-=======
-        android:id="@+id/btn_go_to_ponds"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quản lý hồ cá"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
->>>>>>> origin/main
+        <!-- Nút Quản lý Cá -->
+        <Button
+            android:id="@+id/btnFishList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Quản lý Cá"
+            app:layout_constraintTop_toBottomOf="@id/tvWelcome"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" />
+
+        <!-- Nút Quản lý Hồ Cá -->
+        <Button
+            android:id="@+id/btn_go_to_ponds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Quản lý Hồ Cá"
+            app:layout_constraintTop_toBottomOf="@id/btnFishList"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

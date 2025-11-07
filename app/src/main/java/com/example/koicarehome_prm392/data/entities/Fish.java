@@ -15,6 +15,7 @@ public class Fish {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "fishId")
     public long fishId;
+
     @ColumnInfo(name = "pondId")
     public long pondId;
     @ColumnInfo(name = "fishName")

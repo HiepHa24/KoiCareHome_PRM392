@@ -1,21 +1,20 @@
-package com.example.koicarehome_prm392.pond;
+package com.example.koicarehome_prm392;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog; // *** THÊM IMPORT NÀY ***
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.koicarehome_prm392.R;
-import com.example.koicarehome_prm392.adapter.PondAdapter;
+import com.example.koicarehome_prm392.Adapters.PondAdapter;
 import com.example.koicarehome_prm392.data.entities.Pond;
-import com.example.koicarehome_prm392.viewmodel.PondViewModel;
+import com.example.koicarehome_prm392.ViewModels.PondViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PondListActivity extends AppCompatActivity {

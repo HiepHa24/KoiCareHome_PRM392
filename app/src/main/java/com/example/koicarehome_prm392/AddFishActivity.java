@@ -1,6 +1,7 @@
 package com.example.koicarehome_prm392;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -126,8 +127,16 @@ public class AddFishActivity extends AppCompatActivity {
     }
 
     private void loadPonds() {
-        // Assuming userId = 1 for testing
-        pondViewModel.getPondsByUserId(1).observe(this, ponds -> {
+        SharedPreferences prefs = getSharedPreferences("users", MODE_PRIVATE);
+        long currentUserId = prefs.getLong("current_user_id", -1);
+
+        if (currentUserId == -1) {
+            Toast.makeText(this, "Lỗi xác thực người dùng", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        pondViewModel.getPondsByUserId(currentUserId).observe(this, ponds -> {
             if (ponds != null) {
                 pondList = ponds;
                 List<String> pondNames = new ArrayList<>();
@@ -207,7 +216,6 @@ public class AddFishActivity extends AppCompatActivity {
                 Toast.makeText(this, "Đã cập nhật cá thành công", Toast.LENGTH_SHORT).show();
             }
 
-            // ✅ Gửi kết quả OK về cho FishListActivity
             setResult(RESULT_OK);
             finish();
 

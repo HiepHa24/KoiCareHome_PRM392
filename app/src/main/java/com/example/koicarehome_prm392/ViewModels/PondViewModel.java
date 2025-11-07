@@ -1,30 +1,55 @@
 package com.example.koicarehome_prm392.ViewModels;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.koicarehome_prm392.data.dao.PondDao;
+import com.example.koicarehome_prm392.data.db.AppDatabase;
 import com.example.koicarehome_prm392.data.entities.Pond;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class PondViewModel extends ViewModel {
+public class PondViewModel extends AndroidViewModel {
 
-    // code tạm thời
-    private MutableLiveData<List<Pond>> pondsLiveData = new MutableLiveData<>();
+    private final PondDao pondDao;
+    private final ExecutorService executorService;
 
-    public PondViewModel() {
-        List<Pond> dummyPonds = new ArrayList<>();
+    public PondViewModel(@NonNull Application application) {
+        super(application);
+        AppDatabase database = AppDatabase.getInstance(application);
+        pondDao = database.pondDao();
+        // Tối ưu: Chỉ tạo một luồng duy nhất để xử lý tất cả các tác vụ CSDL
+        executorService = Executors.newSingleThreadExecutor();
+    }
 
-        // Ví dụ 2 hồ tạm
-        dummyPonds.add(new Pond(1, 2000, 6, System.currentTimeMillis()));
-        dummyPonds.add(new Pond(1, 4000, 12, System.currentTimeMillis()));
+    public void insert(Pond pond) {
+        executorService.execute(() -> pondDao.insert(pond));
+    }
 
-        pondsLiveData.setValue(dummyPonds);
+    public void update(Pond pond) {
+        executorService.execute(() -> pondDao.update(pond));
+    }
+
+    public void delete(Pond pond) {
+        executorService.execute(() -> pondDao.delete(pond));
     }
 
     public LiveData<List<Pond>> getPondsByUserId(long userId) {
-        return pondsLiveData;
+        return pondDao.getPondsByUserId(userId);
+    }
+
+    // Đảm bảo ExecutorService được đóng lại khi ViewModel bị hủy
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        executorService.shutdown();
     }
 }

@@ -1,14 +1,17 @@
-package com.example.koicarehome_prm392.adapter;
+package com.example.koicarehome_prm392.Adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView; // *** THÊM IMPORT NÀY ***
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.koicarehome_prm392.R;
 import com.example.koicarehome_prm392.data.entities.Pond;
+
 import java.util.ArrayList;
 import java.util.List;
 
