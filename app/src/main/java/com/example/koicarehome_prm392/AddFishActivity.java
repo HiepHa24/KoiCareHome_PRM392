@@ -180,6 +180,10 @@ public class AddFishActivity extends AppCompatActivity {
         imagePickerLauncher.launch(intent);
     }
 
+    private static final double MIN_LENGTH_CM = 0.5;
+    private static final double MAX_LENGTH_CM = 140.0;
+    private static final double MIN_WEIGHT_G = 1.0;
+    private static final double MAX_WEIGHT_G = 40000.0;
     private void saveFish() {
         String name = etFishName.getText().toString().trim();
         String color = etFishColor.getText().toString().trim();
@@ -197,30 +201,52 @@ public class AddFishActivity extends AppCompatActivity {
             return;
         }
 
+        double length;
+        double weight;
         try {
-            double length = Double.parseDouble(lengthStr);
-            double weight = Double.parseDouble(weightStr);
-            long pondId = pondList.get(spinnerPond.getSelectedItemPosition()).pondId;
-            double foodAmount = fishViewModel.calculateFoodAmount(weight);
-
-            if (editFishId == -1) {
-                Fish fish = new Fish(pondId, name, color, length, weight,
-                        System.currentTimeMillis(), foodAmount, selectedImageUri);
-                fishViewModel.insert(fish);
-                Toast.makeText(this, "Đã thêm cá thành công", Toast.LENGTH_SHORT).show();
-            } else {
-                Fish fish = new Fish(pondId, name, color, length, weight,
-                        System.currentTimeMillis(), foodAmount, selectedImageUri);
-                fish.fishId = editFishId;
-                fishViewModel.update(fish);
-                Toast.makeText(this, "Đã cập nhật cá thành công", Toast.LENGTH_SHORT).show();
-            }
-
-            setResult(RESULT_OK);
-            finish();
-
+            length = Double.parseDouble(lengthStr);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Vui lòng nhập số hợp lệ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Độ dài không hợp lệ", Toast.LENGTH_SHORT).show();
+            etLength.requestFocus();
+            return;
         }
+        try {
+            weight = Double.parseDouble(weightStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Cân nặng không hợp lệ", Toast.LENGTH_SHORT).show();
+            etWeight.requestFocus();
+            return;
+        }
+
+        // validate ranges BEFORE calling ViewModel
+        if (length < MIN_LENGTH_CM || length > MAX_LENGTH_CM) {
+            Toast.makeText(this, "Độ dài phải nằm trong khoảng " + MIN_LENGTH_CM + " - " + (int)MAX_LENGTH_CM + " cm", Toast.LENGTH_LONG).show();
+            etLength.requestFocus();
+            return;
+        }
+        if (weight < MIN_WEIGHT_G || weight > MAX_WEIGHT_G) {
+            Toast.makeText(this, "Cân nặng phải nằm trong khoảng " + (int)MIN_WEIGHT_G + " - " + (int)MAX_WEIGHT_G + " g", Toast.LENGTH_LONG).show();
+            etWeight.requestFocus();
+            return;
+        }
+
+        long pondId = pondList.get(spinnerPond.getSelectedItemPosition()).pondId;
+        double foodAmount = fishViewModel.calculateFoodAmount(weight);
+
+        if (editFishId == -1) {
+            Fish fish = new Fish(pondId, name, color, length, weight,
+                    System.currentTimeMillis(), foodAmount, selectedImageUri);
+            fishViewModel.insert(fish);
+            Toast.makeText(this, "Đã thêm cá thành công", Toast.LENGTH_SHORT).show();
+        } else {
+            Fish fish = new Fish(pondId, name, color, length, weight,
+                    System.currentTimeMillis(), foodAmount, selectedImageUri);
+            fish.fishId = editFishId;
+            fishViewModel.update(fish);
+            Toast.makeText(this, "Đã cập nhật cá thành công", Toast.LENGTH_SHORT).show();
+        }
+
+        setResult(RESULT_OK);
+        finish();
     }
 }
