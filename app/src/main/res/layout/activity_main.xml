@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/z7179405544446_c0f856af5713a85a28fdb9445c82358f"
+    android:background="@drawable/z7179405544490_e20961ba6f7abb305e1419cb01ee998a"
     tools:context=".MainActivity">
 
-        <!-- Tiêu đề và Logo Container -->
+    <!-- Tiêu đề và Logo Container -->
 
     <!-- Nút Quản lý Cá -->
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/z7179405544446_c0f856af5713a85a28fdb9445c82358f"
+    android:background="@drawable/z7179405544490_e20961ba6f7abb305e1419cb01ee998a"
     tools:context=".ProfileActivity">
 
     <TextView
@@ -14,8 +14,8 @@
         android:text="Tên người dùng:"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginTop="32dp"
+        android:textColor="@color/white"
+        android:layout_marginTop="78dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -28,12 +28,12 @@
         android:text=""
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="#FFD700"
+        android:textColor="#FFFFFFFF"
         android:shadowColor="#1A1A1A"
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="4"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="14dp"
         app:layout_constraintTop_toBottomOf="@id/tvUserNameLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
