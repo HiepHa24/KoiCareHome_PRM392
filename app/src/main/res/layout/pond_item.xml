@@ -1,10 +1,10 @@
-<!-- File: res/layout/pond_item.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/pond_item_border"
+    android:background="@drawable/card_background"
     android:padding="16dp"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:elevation="4dp">
 
     <ImageView
         android:id="@+id/icon_delete"
@@ -14,6 +14,9 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:padding="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Xóa hồ"/>
 
     <ImageView
@@ -25,6 +28,9 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="8dp"
         android:padding="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Sửa hồ"/>
 
     <LinearLayout
@@ -40,33 +46,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hồ số: 1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textStyle="bold"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/textViewPondVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thể tích: 2000 L"/>
+            android:text="Thể tích: 2000 L"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="4dp"/>
 
         <TextView
             android:id="@+id/textViewPondMineral"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lượng khoáng cần: 6.00 kg"/>
+            android:text="Lượng khoáng cần: 6.00 kg"
+            android:textColor="@color/text_secondary"/>
 
         <TextView
             android:id="@+id/textViewPondFishCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Số lượng cá: 0"/>
+            android:text="Số lượng cá: 0"
+            android:textColor="@color/text_secondary"/>
 
         <TextView
             android:id="@+id/textViewPondFoodAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lượng thức ăn: 0.00 gram/ngày"/>
-
-    </LinearLayout>
+            android:text="Lượng thức ăn: 0.00 gram/ngày"
+            android:textColor="@color/koi_orange"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp" /> </LinearLayout>
 
 </RelativeLayout>

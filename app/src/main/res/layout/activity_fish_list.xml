@@ -1,30 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:paddingBottom="80dp">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_fish_list"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_margin="-16dp"
-        android:background="@color/water_blue"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    android:background="@color/light_gray_background"> <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/toolbar_fish_list"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_alignParentTop="true"
+    android:background="@color/water_blue"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFishList"
-        android:layout_width="379dp"
-        android:layout_height="514dp"
-        android:layout_above="@id/bottomNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:layout_above="@id/bottomNavBar"
         android:layout_below="@id/toolbar_fish_list"
-        android:layout_marginTop="21dp"
-        android:layout_marginBottom="20dp" />
-
-    <!-- Bottom Navigation Bar -->
+        android:clipToPadding="false"
+        android:padding="8dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddFish"
@@ -34,9 +27,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="32dp"
-        android:src="@android:drawable/ic_input_add" />
-
-    <LinearLayout
+        app:tint="@color/white"
+        app:backgroundTint="@color/water_blue"
+        android:src="@drawable/ic_add" /> <LinearLayout
         android:id="@+id/bottomNavBar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -44,12 +37,10 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:weightSum="2"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="16dp"
+        android:elevation="8dp"
         android:layout_alignParentBottom="true">
 
-        <!-- Nút Home -->
         <LinearLayout
             android:id="@+id/btnHome"
             android:layout_width="0dp"
@@ -60,13 +51,11 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground">
-
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_home"
                 android:contentDescription="Home" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,8 +64,6 @@
                 android:textSize="12sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
-
-        <!-- Nút Profile -->
         <LinearLayout
             android:id="@+id/btnProfile"
             android:layout_width="0dp"
@@ -87,13 +74,11 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground">
-
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_profile"
                 android:contentDescription="Profile" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,7 +87,6 @@
                 android:textSize="12sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/pond_item_border"
+    android:background="@drawable/card_background"
     android:padding="16dp"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:elevation="4dp">
 
     <ImageView
         android:id="@+id/icon_delete"
@@ -16,6 +16,7 @@
         android:padding="4dp"
         android:clickable="true"
         android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Xóa cá"/>
 
     <ImageView
@@ -29,6 +30,7 @@
         android:padding="4dp"
         android:clickable="true"
         android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Sửa cá"/>
 
     <LinearLayout
@@ -39,12 +41,14 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ivFish"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background"/>
+            android:src="@drawable/ic_launcher_background"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -58,35 +62,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tên cá"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textStyle="bold"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tvFishColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Màu: Đỏ"/>
+                android:text="Màu: Đỏ"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="4dp"/>
 
             <TextView
                 android:id="@+id/tvFishSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="50cm - 5000g"/>
+                android:text="50cm - 5000g"
+                android:textColor="@color/text_secondary"/>
 
             <TextView
                 android:id="@+id/tvPondInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hồ: "/>
+                android:text="Hồ: "
+                android:textColor="@color/text_secondary"/>
 
             <TextView
                 android:id="@+id/tvFoodAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thức ăn: 50g/ngày"/>
+                android:text="Thức ăn: 50g/ngày"
+                android:textColor="@color/koi_orange"
+                android:textStyle="bold" />
 
         </LinearLayout>
-
     </LinearLayout>
-
 </RelativeLayout>
